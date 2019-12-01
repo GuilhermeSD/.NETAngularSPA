@@ -1,10 +1,37 @@
-<p>
-  eventos works!
-</p>
-<br/>
-
-<div *ngFor="let evento of eventos">
-  {{evento.eventoId}}
-  <hr/>
-  {{evento.tema}}
+<div class="form-inline">
+  <div class="form-group mb-2">
+    <input type="text" class="form-control mr-2"
+    [(ngModel)]="filtroLista">
+    <button class="btn btn-outline-success">buscar</button>
+  </div>
 </div>
+<h6>{{filtroLista}}</h6>
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <th><button (click)='alternarImagem()' class="btn btn-outline-warning">Mostrar</button></th>
+    <th>img</th>
+    <th>Tema</th>
+    <th>Local</th>
+    <th>Data</th>
+    <th>Qtd Pessoas</th>
+    <th>Lote</th>
+    <th>Opcoes</th>
+  </thead>
+  <tbody>
+    <tr *ngFor='let evento of eventosFiltrados'>
+      <td>{{evento.eventoId}}</td>
+      <td><img 
+        *ngIf='mostrarImagem'
+        src="http://localhost:5000/img/{{evento.imagemURL}}"
+        [style.width.px]='imagemlargura'
+        [style.margem.px]='imagemmargem'
+        /></td>
+      <td>{{evento.tema}}</td>
+      <td>{{evento.local}}</td>
+      <td>{{evento.dataEvento}}</td>
+      <td></td>
+      <td>{{evento.lote | uppercase}}</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
