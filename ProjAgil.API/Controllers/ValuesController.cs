@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ProjAgil.API.Data;
-using ProjAgil.API.Model;
+using Domain;
+using Repository;
 
 namespace ProjAgil.API.Controllers
 {

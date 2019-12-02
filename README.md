@@ -5,7 +5,7 @@ c# extensions
 Bracket pair colorizer (fechamento de chaves)  
 Materiail icon theme  
 Path Intellisense  
-Nuget Package Manager    
+Nuget Package Manager      
   
 ## comandos  
 dotnet add GameTop/GameTop.csproj reference GameTop.Lib/GameTop.Lib.csproj  
@@ -21,3 +21,7 @@ Live Server
 npm  
 Prettier - Code formatter  
 TSLint  
+
+## migrations repository  
+
+dotnet ef --startup-project ../ProjAgil.API migrations add init  
