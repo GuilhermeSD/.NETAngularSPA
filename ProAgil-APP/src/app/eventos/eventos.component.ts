@@ -4,6 +4,8 @@ import { Evento } from '../_models/Evento';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { defineLocale, BsLocaleService, ptBrLocale} from 'ngx-bootstrap';
+import { templateJitUrl } from '@angular/compiler';
+import { observable, Observable } from 'rxjs';
 defineLocale('pt-br', ptBrLocale);
 
 @Component({
@@ -25,9 +27,11 @@ export class EventosComponent implements OnInit {
 
   eventosFiltrados: Evento[];
   eventos: Evento[];
+  evento: Evento;
   imagemlargura = 50;
   imagemmargem = 2;
   mostrarImagem = false;
+  bodyDeletarEvento = '';
 
   modalRef: BsModalRef;
   registerForm: FormGroup;
@@ -41,7 +45,14 @@ export class EventosComponent implements OnInit {
     }
 
   openModal(template: any) {
-    template.show(); 
+    this.registerForm.reset();    
+    template.show();
+  }
+
+  openModalEdit(template: any, model: Evento) {
+    this.registerForm.reset();    
+    template.show();
+    this.registerForm.patchValue(model);
   }
 
   ngOnInit() {
@@ -55,6 +66,7 @@ export class EventosComponent implements OnInit {
 
   validation() {
     this.registerForm = this.fb.group({
+      id: [''],
       tema: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
       local: ['', Validators.required],
       dataEvento: ['', Validators.required],
@@ -65,8 +77,24 @@ export class EventosComponent implements OnInit {
     });
   }
 
-  salvarAlteracao() {
-
+  salvarAlteracao(template: any) {
+    if(this.registerForm.valid) {
+      this.evento = Object.assign({}, this.registerForm.value);
+      let obs = new Observable<Object>();
+      obs = this.eventoServices.postEvento(this.evento);
+      if(this.evento.id) {
+        obs = this.eventoServices.putEvento(this.evento);
+      }
+      obs.subscribe(
+        (novoEvento: Evento) => {
+          console.log(novoEvento);
+          template.hide();
+          this.getEventos();
+        }, error => {
+          console.log(error);
+        }
+      );
+    }
   }
 
   filtrarEventos(filtrarPor: string): Evento[] {
@@ -82,6 +110,23 @@ export class EventosComponent implements OnInit {
     }, error => {
       console.log(error);
     });
+  }
+
+  excluirEvento(evento: Evento, template: any) {
+    this.openModal(template);
+    this.evento = evento;
+    this.bodyDeletarEvento = `Tem certeza que deseja excluir o Evento: ${evento.tema}, Código: ${evento.tema}`;
+  }
+  
+  confirmeDelete(template: any) {
+    this.eventoServices.deleteEvento(this.evento.id).subscribe(
+      () => {
+          template.hide();
+          this.getEventos();
+        }, error => {
+          console.log(error);
+        }
+    );
   }
 
 }

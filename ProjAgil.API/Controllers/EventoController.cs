@@ -77,7 +77,7 @@ namespace ProjAgil.API.Controllers
             }
         }    
 
-        [HttpPut]
+        [HttpPut("{EventoId}")]
         public async Task<IActionResult> Put(int EventoId, Evento model)
         {
             try
@@ -100,7 +100,7 @@ namespace ProjAgil.API.Controllers
             }
         } 
 
-        [HttpDelete]
+        [HttpDelete("{EventoId}")]
         public async Task<IActionResult> Delete(int EventoId)
         {
             try

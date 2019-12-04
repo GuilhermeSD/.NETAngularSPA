@@ -11,6 +11,7 @@ namespace Repository
         public Repository(DataContext context)
         {
             _context = context;
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         public DataContext Context { get; }
