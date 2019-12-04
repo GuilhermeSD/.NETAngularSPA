@@ -16,6 +16,7 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Repository;
+using AutoMapper;
 
 namespace ProjAgil.API
 {
@@ -34,7 +35,8 @@ namespace ProjAgil.API
             services.AddDbContext<DataContext>(d=>d.UseSqlite(
                 Configuration.GetConnectionString("DefaultConnection")
                 ));
-            services.AddScoped<IRepository, Repository.Repository>();    
+            services.AddScoped<IRepository, Repository.Repository>();
+            services.AddAutoMapper();   
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddCors();
         }

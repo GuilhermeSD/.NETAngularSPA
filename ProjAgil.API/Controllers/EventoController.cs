@@ -1,19 +1,24 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProjAgil.API.Dtos;
 using Repository;
 
 namespace ProjAgil.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventoController: ControllerBase
+    public class EventoController : ControllerBase
     {
         private readonly IRepository _repository;
-
-        public EventoController(IRepository repository)
+        private readonly IMapper _mapper;
+        public EventoController(IRepository repository, IMapper mapper)
         {
+            _mapper = mapper;
             _repository = repository;
         }
 
@@ -23,11 +28,13 @@ namespace ProjAgil.API.Controllers
         {
             try
             {
-                return Ok(await _repository.GetAllEventosAsync(true));    
+                var eventos = await _repository.GetAllEventosAsync(true);
+                var result = _mapper.Map<IEnumerable<EventoDto>>(eventos);
+                return Ok(result);
             }
             catch (System.Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!");                
+                return StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!");
             }
         }
 
@@ -36,11 +43,11 @@ namespace ProjAgil.API.Controllers
         {
             try
             {
-                return Ok(await _repository.GetEventosAsyncById(EventoId, true));    
+                return Ok(await _repository.GetEventosAsyncById(EventoId, true));
             }
             catch (System.Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!");                
+                return StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!");
             }
         }
 
@@ -49,56 +56,58 @@ namespace ProjAgil.API.Controllers
         {
             try
             {
-                return Ok(await _repository.GetAllEventosAsyncByTema(tema, true));    
+                return Ok(await _repository.GetAllEventosAsyncByTema(tema, true));
             }
             catch (System.Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!");                
+                return StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!");
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Evento model)
+        public async Task<IActionResult> Post(EventoDto model)
         {
             try
             {
-                _repository.Add(model);
-                
-                if(await _repository.SaveChangesAsync()) 
+                var evento = _mapper.Map<Evento>(model);
+                _repository.Add(evento);
+
+                if (await _repository.SaveChangesAsync())
                 {
-                    return Created($"/api/evento/{model.Id}", model);                        
+                    return Created($"/api/evento/{evento.Id}", _mapper.Map<EventoDto>(evento));
                 }
 
                 return BadRequest();
             }
             catch (System.Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!");                
+                return StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!");
             }
-        }    
+        }
 
         [HttpPut("{EventoId}")]
-        public async Task<IActionResult> Put(int EventoId, Evento model)
+        public async Task<IActionResult> Put(int EventoId, EventoDto model)
         {
             try
             {
                 var e = await _repository.GetEventosAsyncById(EventoId, false);
-                if(e==null) return NotFound();
+                if (e == null) return NotFound();
 
+                _mapper.Map(model, e);
                 _repository.Update(model);
-                
-                if(await _repository.SaveChangesAsync()) 
+
+                if (await _repository.SaveChangesAsync())
                 {
-                    return Created($"/api/evento/{model.Id}", model);                        
+                    return Created($"/api/evento/{e.Id}", _mapper.Map<EventoDto>(e));
                 }
 
                 return BadRequest();
             }
             catch (System.Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!");                
+                return StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!");
             }
-        } 
+        }
 
         [HttpDelete("{EventoId}")]
         public async Task<IActionResult> Delete(int EventoId)
@@ -106,21 +115,21 @@ namespace ProjAgil.API.Controllers
             try
             {
                 var e = await _repository.GetEventosAsyncById(EventoId, false);
-                if(e==null) return NotFound();
-                
+                if (e == null) return NotFound();
+
                 _repository.Delete(e);
-                
-                if(await _repository.SaveChangesAsync()) 
+
+                if (await _repository.SaveChangesAsync())
                 {
-                    return Ok();                        
+                    return Ok();
                 }
 
                 return BadRequest();
             }
             catch (System.Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!");                
+                return StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!");
             }
-        }                           
+        }
     }
 }
