@@ -4,9 +4,10 @@ import { Evento } from '../_models/Evento';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { defineLocale, BsLocaleService, ptBrLocale} from 'ngx-bootstrap';
-import { templateJitUrl } from '@angular/compiler';
 import { observable, Observable } from 'rxjs';
 defineLocale('pt-br', ptBrLocale);
+
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-eventos',
@@ -32,7 +33,7 @@ export class EventosComponent implements OnInit {
   imagemmargem = 2;
   mostrarImagem = false;
   bodyDeletarEvento = '';
-
+  titulo = 'Eventos';
   modalRef: BsModalRef;
   registerForm: FormGroup;
 
@@ -40,6 +41,7 @@ export class EventosComponent implements OnInit {
     private eventoServices: EventoService
     , private fb: FormBuilder
     , private localeService: BsLocaleService
+    , private toastr: ToastrService
    ) { 
      this.localeService.use('pt-br');
     }
@@ -123,7 +125,9 @@ export class EventosComponent implements OnInit {
       () => {
           template.hide();
           this.getEventos();
+          this.toastr.success('Removido com sucesso', 'Remover Evento');
         }, error => {
+          this.toastr.error('Ocorreu um erro na sua solicitação', 'Remover Evento');
           console.log(error);
         }
     );

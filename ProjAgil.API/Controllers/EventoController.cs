@@ -94,7 +94,7 @@ namespace ProjAgil.API.Controllers
                 if (e == null) return NotFound();
 
                 _mapper.Map(model, e);
-                _repository.Update(model);
+                _repository.Update(e);
 
                 if (await _repository.SaveChangesAsync())
                 {

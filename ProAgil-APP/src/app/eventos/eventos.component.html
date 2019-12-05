@@ -1,3 +1,5 @@
+<app-titulo [title]='titulo'></app-titulo>
+
 <div class="d-flex">
     <div class="form-inline">
         <div class="form-group mb-2">
@@ -125,6 +127,8 @@
                   <label>Data e Hora</label>
                   <input
                     type="text"
+                    value="{{ dataEvento | DateTimeFormatPipe }}"
+                    [(ngModel)]="dataEvento"
                     bsDatepicker
                     [bsConfig] = " {dateInputFormat: 'DD/MMM/YYYY hh:mm a'} "
                     class="form-control"
