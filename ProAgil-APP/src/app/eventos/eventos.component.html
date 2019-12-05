@@ -164,15 +164,23 @@
                 </div>
                 <div class="form-group col-md-9">
                   <label>Imagem</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    [ngClass]="{
-                      'is-invalid':
-                      registerForm.get('imagemURL').errors && registerForm.get('imagemURL').touched
-                    }"          
-                    formControlName="imagemURL"
-                  />
+                  <table>
+                    <tr>
+                      <td>
+                          <button class="btn btn-success" (click)='file.click()'>Enviar</button>
+                          <input
+                            (change)="onFileChange($event)"
+                            type="file" #file
+                            class="form-control"
+                            [ngClass]="{
+                              'is-invalid':
+                              registerForm.get('imagemURL').errors && registerForm.get('imagemURL').touched
+                            }"          
+                            formControlName="imagemURL" style="display:none"
+                          />        
+                      </td>
+                    </tr>
+                  </table>
                   <div *ngIf="registerForm.get('imagemURL').hasError('required')  && registerForm.get('imagemURL').touched " class="invalid-feedback">
                       É Obrigatório.
                   </div>

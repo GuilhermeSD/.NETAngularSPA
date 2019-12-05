@@ -17,6 +17,7 @@ import { ToastrService } from 'ngx-toastr';
 export class EventosComponent implements OnInit {
 
   _filtroLista: string;
+  fileNameToUpload: string;
   get filtroLista(): string {
     return this._filtroLista;
   }
@@ -36,6 +37,7 @@ export class EventosComponent implements OnInit {
   titulo = 'Eventos';
   modalRef: BsModalRef;
   registerForm: FormGroup;
+  file: File;
 
   constructor(
     private eventoServices: EventoService
@@ -54,6 +56,9 @@ export class EventosComponent implements OnInit {
   openModalEdit(template: any, model: Evento) {
     this.registerForm.reset();    
     template.show();
+    this.evento = Object.assign({}, model);
+    this.fileNameToUpload = model.imagemURL.toString();
+    this.evento.imagemURL = ''; //Gambi pra corrigir o bind das imagens
     this.registerForm.patchValue(model);
   }
 
@@ -79,9 +84,22 @@ export class EventosComponent implements OnInit {
     });
   }
 
+  onFileChange(event) {
+    this.file = event.target.files;
+  }
+
+  upload() {
+    const nomeArquivo = this.evento.imagemURL.split('\\', 3);
+    this.evento.imagemURL = nomeArquivo[2];
+    this.eventoServices.postUpload(this.file, this.evento.imagemURL).subscribe();
+  }
+
   salvarAlteracao(template: any) {
     if(this.registerForm.valid) {
       this.evento = Object.assign({}, this.registerForm.value);
+      
+      this.upload();
+      
       let obs = new Observable<Object>();
       obs = this.eventoServices.postEvento(this.evento);
       if(this.evento.id) {

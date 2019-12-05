@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using AutoMapper;
 using Domain;
@@ -36,6 +39,35 @@ namespace ProjAgil.API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!");
             }
+        }
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> Upload()
+        {
+            try
+            {
+                var file = Request.Form.Files[0];
+                var folder = Path.Combine("Resourcers", "Images");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folder);
+
+                if(file.Length > 0) 
+                {
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName;
+                    var fullPath = Path.Combine(pathToSave, fileName);
+
+                    using(var stream = new FileStream(fullPath, FileMode.Create)) 
+                    {
+                        file.CopyTo(stream);
+                    }
+                    return Ok();
+                }                
+            }
+            catch (System.Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados Falhou!");
+            }
+
+            return BadRequest();
         }
 
         [HttpGet("{EventoId}")]
