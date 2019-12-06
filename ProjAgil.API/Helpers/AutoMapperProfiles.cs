@@ -1,6 +1,7 @@
 using System.Linq;
 using AutoMapper;
 using Domain;
+using Domain.Identity;
 using ProjAgil.API.Dtos;
 
 namespace ProjAgil.API.Helpers
@@ -16,6 +17,8 @@ namespace ProjAgil.API.Helpers
             
             CreateMap<RedeSocial, RedeSocialDto>().ReverseMap();
             CreateMap<Lote, LoteDto>().ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, UserLoginDto>().ReverseMap();
             
             CreateMap<Palestrante, PalestranteDto>().
             ForMember(dto => dto.Eventos, opt => {

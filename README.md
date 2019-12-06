@@ -24,8 +24,13 @@ TSLint
 
 ## migrations repository  
 
-dotnet ef --startup-project ../ProjAgil.API migrations add init  
+dotnet ef --startup-project ../ProjAgil.API migrations add init    
+dotnet ef --startup-project ../ProjAgil.API database update  
 
 ## automapper  
 
-AutoMapper.Extensions.Microsoft.DependencyInjection  versiao 4.0.0
+AutoMapper.Extensions.Microsoft.DependencyInjection  versiao 4.0.0  
+
+## Identity  
+
+Identity.EntityFramework 2.0.0  

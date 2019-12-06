@@ -42,7 +42,7 @@ namespace ProjAgil.API.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> Upload()
+        public IActionResult Upload()
         {
             try
             {
