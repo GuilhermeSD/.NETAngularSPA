@@ -34,3 +34,9 @@ AutoMapper.Extensions.Microsoft.DependencyInjection  versiao 4.0.0
 ## Identity  
 
 Identity.EntityFramework 2.0.0  
+
+## Angular Gard  
+
+ng g g auth/auth  
+
+selecionar CanActivate  
