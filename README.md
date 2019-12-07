@@ -5,7 +5,10 @@ c# extensions
 Bracket pair colorizer (fechamento de chaves)  
 Materiail icon theme  
 Path Intellisense  
-Nuget Package Manager      
+Nuget Package Manager  
+Sql server  
+Docker  
+
   
 ## comandos  
 dotnet add GameTop/GameTop.csproj reference GameTop.Lib/GameTop.Lib.csproj  
