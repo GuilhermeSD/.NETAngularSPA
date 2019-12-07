@@ -12,7 +12,7 @@ import { Evento } from 'src/app/_models/Evento';
 })
 export class EventoEditComponent implements OnInit {
 
-  evento: Evento = new Evento();
+  evento = new Evento();
   imagemURL = 'assets/img/upload.png';
   registerForm: FormGroup;
   file: File;
